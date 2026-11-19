@@ -1,0 +1,588 @@
+<title>CSS Classes Challenge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+  /* Layout: one reading column, same system as the HTML assignment. Parts follow the build order: classes, units, display, position. */
+  :root {
+    --bg: #F3F6F5;
+    --surface: #FFFFFF;
+    --ink: #16211F;
+    --ink-2: #485955;
+    --line: #D3DDDA;
+    --line-strong: #93A6A0;
+    --accent: #0A7366;
+    --on-accent: #FFFFFF;
+    --mark: #F5D547;
+    --mark-bg: #FFF5CC;
+    --code-bg: #E7EEEC;
+    --pre-bg: #14201D;
+    --pre-ink: #DCE8E4;
+    --pre-accent: #7FE0CD;
+    --pre-mute: #7C928B;
+    --wf-fill: #E3EAE8;
+    --wf-band: #EDF2F0;
+    --wf-head: #D3DEDB;
+
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0F1614;
+      --surface: #172220;
+      --ink: #E4ECE9;
+      --ink-2: #A0B3AD;
+      --line: #2A3A36;
+      --line-strong: #52695F;
+      --accent: #4FD1BB;
+      --on-accent: #06201B;
+      --mark: #D9BC3F;
+      --mark-bg: #2B2711;
+      --code-bg: #1F2D2A;
+      --pre-bg: #0A100F;
+      --pre-ink: #D5E3DE;
+      --pre-accent: #7FE0CD;
+      --pre-mute: #6E847D;
+      --wf-fill: #22322E;
+      --wf-band: #1C2A27;
+      --wf-head: #2B3F3A;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0F1614;
+    --surface: #172220;
+    --ink: #E4ECE9;
+    --ink-2: #A0B3AD;
+    --line: #2A3A36;
+    --line-strong: #52695F;
+    --accent: #4FD1BB;
+    --on-accent: #06201B;
+    --mark: #D9BC3F;
+    --mark-bg: #2B2711;
+    --code-bg: #1F2D2A;
+    --pre-bg: #0A100F;
+    --pre-ink: #D5E3DE;
+    --pre-accent: #7FE0CD;
+    --pre-mute: #6E847D;
+    --wf-fill: #22322E;
+    --wf-band: #1C2A27;
+    --wf-head: #2B3F3A;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 96px;
+  }
+  .wrap { max-width: 840px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px; }
+  .prose { max-width: 66ch; }
+
+  h1, h2, h3 { font-family: var(--display); line-height: 1.12; text-wrap: balance; margin: 0; letter-spacing: -0.015em; }
+  h1 { font-size: clamp(2.4rem, 7vw, 3.8rem); font-weight: 800; }
+  h2 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); font-weight: 700; }
+  h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.005em; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  code, .mono { font-family: var(--mono); font-size: 0.86em; }
+  :not(pre) > code { background: var(--code-bg); padding: 0.1em 0.38em; border-radius: 4px; white-space: nowrap; }
+  .eyebrow { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+
+  .top { display: flex; flex-direction: column; gap: 24px; }
+  .lead { font-size: 1.15rem; max-width: 56ch; color: var(--ink-2); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; border-top: 2px solid var(--ink); margin: 0; }
+  .facts div { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); }
+  .facts dt { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+  .facts dd { margin: 2px 0 0; font-weight: 600; }
+  .rules { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; max-width: 62ch; }
+
+  .progress { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .progress .track { flex: 1 1 200px; height: 10px; background: var(--wf-fill); border-radius: 5px; overflow: hidden; }
+  .progress .fill { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+  .progress output { font-family: var(--mono); font-size: 0.85rem; min-width: 8ch; }
+  button.ghost { font: inherit; font-size: 0.85rem; background: none; color: var(--ink-2); border: 1px solid var(--line-strong); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+  button.ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+  .part { display: flex; flex-direction: column; gap: 20px; }
+  .part-head { display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--ink); padding-top: 14px; }
+  .part-head p { color: var(--ink-2); max-width: 62ch; }
+
+  .tasks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .tasks li { border-bottom: 1px solid var(--line); }
+  .tasks li:first-child { border-top: 1px solid var(--line); }
+  .task { display: grid; grid-template-columns: 22px 1fr; gap: 12px; padding: 12px 0; cursor: pointer; align-items: start; }
+  .task input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); cursor: pointer; }
+  .task input:checked + span { color: var(--ink-2); }
+  .chal { display: inline-block; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; background: var(--mark); color: #1b1a10; padding: 1px 7px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; font-weight: 600; }
+
+  .check { background: var(--mark-bg); padding: 12px 16px; border-radius: 4px; max-width: 66ch; }
+  .check strong { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; margin-right: 8px; }
+
+  pre { background: var(--pre-bg); color: var(--pre-ink); font-family: var(--mono); font-size: 0.84rem; line-height: 1.65; margin: 0; padding: 16px 18px; border-radius: 6px; overflow-x: auto; tab-size: 2; }
+  pre .c { color: var(--pre-mute); }
+  pre .t { color: var(--pre-accent); }
+  .code-label { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-2); letter-spacing: 0.06em; margin-bottom: 6px; display: block; }
+
+  .scroll { overflow-x: auto; }
+  table.ref { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.93rem; }
+  table.ref th { text-align: left; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); border-bottom: 2px solid var(--ink); padding: 8px 12px 8px 0; font-weight: 600; }
+  table.ref td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.ref td:first-child { white-space: nowrap; }
+
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
+  .mini-list { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+  .qs { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 10px; max-width: 66ch; }
+
+  figure.diagram { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .diagram .scroll { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 16px 8px; }
+  .diagram svg { display: block; width: 100%; min-width: 700px; height: auto; margin: 0 auto; color: var(--ink); }
+  .diagram figcaption { color: var(--ink-2); font-size: 0.93rem; max-width: 66ch; }
+  .wf text { font-family: var(--sans); font-size: 12px; fill: var(--ink); }
+  .wf .tl { font-family: var(--mono); font-size: 11px; fill: var(--accent); font-weight: 500; }
+  .wf .tk { font-family: var(--mono); font-size: 11px; fill: var(--ink); font-weight: 600; }
+  .wf .tm { fill: var(--ink-2); font-size: 11px; }
+  .wf .b { font-weight: 700; }
+  .wf .h1 { font-family: var(--display); font-size: 22px; font-weight: 800; }
+  .wf .frame { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.5; }
+  .wf .band { fill: var(--wf-band); }
+  .wf .fillr { fill: var(--wf-fill); stroke: var(--line-strong); }
+  .wf .box { fill: var(--surface); stroke: var(--line-strong); }
+  .wf .ln { stroke: var(--line-strong); fill: none; }
+  .wf .dash { stroke: var(--line-strong); fill: none; stroke-dasharray: 4 3; }
+  .wf .bar { fill: var(--line-strong); opacity: .55; }
+  .wf .acc { fill: var(--accent); }
+  .wf .accl { fill: var(--accent); fill-opacity: .16; stroke: var(--accent); }
+  .wf .onacc { fill: var(--on-accent); font-weight: 600; }
+
+  @media (max-width: 560px) {
+    body { padding-block: 24px 64px; }
+    .wrap { gap: 48px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .progress .fill { transition: none; } }
+
+  /* Print / PDF */
+  @page { size: A4; margin: 16mm 14mm; }
+  @media print {
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { padding: 0; font-size: 12px; line-height: 1.5; }
+    .wrap, .part, .top, .part-head, figure.diagram { display: block; max-width: none; }
+    .wrap > * + * { margin-top: 30px; }
+    .part > * + *, .top > * + *, .part-head > * + * { margin-top: 14px; }
+    .part-head { break-after: avoid; break-inside: avoid; }
+    .part-head > * { break-after: avoid; }
+    .part-head + * { break-before: avoid; }
+    .part-head .eyebrow { display: block; }
+    .two { display: block; }
+    .two > * + * { margin-top: 18px; }
+    .two > div { break-inside: avoid; }
+    .progress { display: none; }
+    h1 { font-size: 2.4rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.05rem; }
+    h2, h3, .part-head { break-after: avoid; }
+    figure.diagram, table.ref, pre, .check, .tasks li, .facts div { break-inside: avoid; }
+    table.ref { min-width: 0; font-size: 0.9rem; }
+    .scroll { overflow: visible; }
+    .diagram svg { min-width: 0; }
+    .tasks li { break-inside: avoid; }
+    pre { overflow: visible; white-space: pre-wrap; }
+  }
+</style>
+
+<body>
+<main class="wrap">
+
+  <header class="top">
+    <span class="eyebrow">CSS &middot; Take-home assignment</span>
+    <h1>CSS Classes Challenge</h1>
+    <p class="lead">Today you wrote classes, set up CSS variables, and met the display and position properties. You also researched rem and em. Now you use all of it together: restyle the hero page in <code>index.html</code> using classes only.</p>
+
+    <dl class="facts">
+      <div><dt>Time</dt><dd>2 to 3 hours</dd></div>
+      <div><dt>Files</dt><dd>index.html, css/styles.css, answers.md</dd></div>
+      <div><dt>Tools</dt><dd>VS Code and a browser</dd></div>
+      <div><dt>Marks</dt><dd>100</dd></div>
+    </dl>
+
+    <ul class="rules">
+      <li><strong>Style with classes.</strong> No <code>style=""</code> in the HTML and no styling by id.</li>
+      <li><strong>Use rem or em for sizes</strong> unless a task says px. Thin borders can stay in px.</li>
+      <li><strong>Type the CSS yourself.</strong> Use your notes from the session. Add short comments on the tricky lines.</li>
+      <li><strong>Refresh after every task.</strong> You may add classes and a few tags to the HTML.</li>
+    </ul>
+
+    <div class="progress" aria-label="Your progress">
+      <div class="track" aria-hidden="true"><div class="fill" id="fill"></div></div>
+      <output id="prog-text" for="fill">0 of 0 ticked</output>
+      <button type="button" class="ghost" id="reset">Clear ticks</button>
+    </div>
+  </header>
+
+  <!-- ===== Recap ===== -->
+  <section class="part" id="recap">
+    <div class="part-head">
+      <span class="eyebrow">Before you start</span>
+      <h2>What you should already know</h2>
+      <p>Skim this first. It covers the session and your research. Come back to it whenever a task feels unclear.</p>
+    </div>
+
+    <div class="two">
+      <div class="prose">
+        <h3>Classes</h3>
+        <ul class="mini-list" style="margin-top:10px">
+          <li>A class is a reusable label. In HTML: <code>class="box"</code>. In CSS: <code>.box { }</code>.</li>
+          <li>One class can go on many elements. One element can have many classes: <code>class="box box-one"</code>.</li>
+          <li>Shared look goes in <code>.box</code>. The differences go in <code>.box-one</code>.</li>
+          <li>An id like <code>#home</code> is unique on the page. Use it for links, and use classes for styling.</li>
+        </ul>
+      </div>
+      <div>
+        <span class="code-label">Variables, defined once and used anywhere</span>
+<pre><span class="t">:root</span> {
+  --accent: #ff5b36;
+  --max-width: 1280px;
+}
+<span class="t">.btn-primary</span> {
+  background-color: var(--accent);
+}</pre>
+      </div>
+    </div>
+
+    <div class="scroll">
+      <table class="ref">
+        <thead><tr><th>Unit</th><th>Relative to</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td><code>px</code></td><td>Nothing. A fixed size.</td><td>Thin borders, shadows.</td></tr>
+          <tr><td><code>rem</code></td><td>The font size of the root (<code>html</code>), usually 16px.</td><td>Font sizes, spacing, gaps. They scale with the user's browser settings.</td></tr>
+          <tr><td><code>em</code></td><td>The font size of the element itself. For <code>font-size</code> itself, the parent's.</td><td>Padding on buttons, so it grows with the button's text.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose">em compounds. A child at <code>1.2em</code> inside a parent at <code>1.2em</code> is 1.44 times the base size. rem does not compound.</p>
+
+    <div class="two">
+      <div class="scroll">
+        <table class="ref" style="min-width:0">
+          <thead><tr><th>display</th><th>Behaviour</th></tr></thead>
+          <tbody>
+            <tr><td><code>block</code></td><td>New line, full width. Width and height work.</td></tr>
+            <tr><td><code>inline</code></td><td>Stays in the line of text. Width and height are ignored.</td></tr>
+            <tr><td><code>inline-block</code></td><td>Stays in the line. Width, height and vertical padding work.</td></tr>
+            <tr><td><code>flex</code></td><td>Children sit in a row. Use <code>gap</code>, <code>justify-content</code>, <code>align-items</code>.</td></tr>
+            <tr><td><code>none</code></td><td>Removed from the page.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll">
+        <table class="ref" style="min-width:0">
+          <thead><tr><th>position</th><th>Behaviour</th></tr></thead>
+          <tbody>
+            <tr><td><code>static</code></td><td>Default. Normal flow. <code>top</code> and <code>left</code> do nothing.</td></tr>
+            <tr><td><code>relative</code></td><td>Stays in flow, can be nudged. Anchor for absolute children.</td></tr>
+            <tr><td><code>absolute</code></td><td>Leaves the flow. Placed against the nearest positioned parent.</td></tr>
+            <tr><td><code>fixed</code></td><td>Leaves the flow. Placed against the window. Stays while scrolling.</td></tr>
+            <tr><td><code>sticky</code></td><td>Scrolls normally, then sticks at an offset such as <code>top: 5rem</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="prose"><code>z-index</code> decides which positioned element sits on top. It only works on elements that are positioned.</p>
+  </section>
+
+  <!-- ===== Diagram ===== -->
+  <section class="part" id="target">
+    <div class="part-head">
+      <span class="eyebrow">The target</span>
+      <h2>Recreate this page</h2>
+      <p>The wireframe shows the finished hero page. Teal labels give the class name and the CSS that part needs. You choose the colours, words and photo.</p>
+    </div>
+
+    <figure class="diagram">
+      <div class="scroll">
+        <svg class="wf" viewBox="0 0 740 616" role="img" aria-label="Wireframe of the hero page. A fixed header sits on top, with room reserved under it. Below, a container holds a flex row with a text column on the left (tag, h1, lead paragraph, two buttons) and a photo column on the right (image with an absolutely positioned badge, name and role). At the bottom, a box lab section holds three boxes for position experiments.">
+
+          <rect class="frame" x="40" y="8" width="660" height="592" rx="6"/>
+
+          <!-- header -->
+          <path class="band" d="M41 114 V15 a6 6 0 0 1 6 -6 H693 a6 6 0 0 1 6 6 V114 Z"/>
+          <circle class="bar" cx="56" cy="23" r="4"/><circle class="bar" cx="70" cy="23" r="4"/><circle class="bar" cx="84" cy="23" r="4"/>
+          <line class="ln" x1="41" y1="38" x2="699" y2="38"/>
+          <line class="ln" x1="41" y1="114" x2="699" y2="114"/>
+          <rect class="fillr" x="56" y="50" width="40" height="40" rx="3"/>
+          <text class="tl" x="76" y="74" text-anchor="middle">img</text>
+          <text x="112" y="74">Home</text><text x="162" y="74">About</text><text x="214" y="74">Projects</text><text x="282" y="74">Blogs</text><text x="330" y="74">Contact</text>
+          <rect class="acc" x="588" y="56" width="96" height="28" rx="4"/>
+          <text class="onacc" x="636" y="74" text-anchor="middle">Let's Talk</text>
+          <text class="tl" x="56" y="106">header: position fixed; z-index 100</text>
+          <text class="tl" x="684" y="106" text-anchor="end">nav: display flex; space-between</text>
+
+          <!-- header spacer -->
+          <rect class="dash" x="41" y="114" width="658" height="34"/>
+          <text class="tl" x="56" y="135">#home padding-top: 5rem, room under the fixed header</text>
+
+          <!-- container -->
+          <rect class="dash" x="48" y="156" width="644" height="314" rx="4"/>
+          <text class="tl" x="64" y="173">div.container: max-width, margin 0 auto</text>
+          <text class="tl" x="64" y="190">.hero: display flex; gap 4rem; align-items center</text>
+
+          <!-- hero-text -->
+          <rect class="ln" x="72" y="198" width="280" height="248" rx="4"/>
+          <text class="tl" x="80" y="214">.hero-text</text>
+          <rect class="fillr" x="88" y="222" width="164" height="22" rx="11"/>
+          <text class="tm" x="170" y="237" text-anchor="middle">Web Developer, Nairobi</text>
+          <text class="tl" x="262" y="237">p.tag</text>
+          <text class="h1" x="88" y="272">I build</text>
+          <text class="h1" x="88" y="298">fast digital</text>
+          <text class="h1" x="88" y="324">products</text>
+          <text class="tl" x="262" y="298">h1: 3.5rem</text>
+          <rect class="bar" x="88" y="342" width="170" height="6" rx="3"/>
+          <rect class="bar" x="88" y="356" width="140" height="6" rx="3"/>
+          <text class="tl" x="268" y="356">p.lead</text>
+          <text class="tl" x="88" y="384">buttons row: display flex; gap 1rem</text>
+          <rect class="acc" x="88" y="392" width="120" height="30" rx="4"/>
+          <text class="onacc" x="148" y="411" text-anchor="middle">Explore</text>
+          <rect class="box" x="220" y="392" width="112" height="30" rx="4"/>
+          <text x="276" y="411" text-anchor="middle">Get in Touch</text>
+          <text class="tl" x="88" y="440">a.btn.btn-primary + a.btn.btn-outline</text>
+
+          <!-- hero-photo -->
+          <rect class="ln" x="368" y="198" width="316" height="248" rx="4"/>
+          <text class="tl" x="376" y="214">.hero-photo: position relative</text>
+          <rect class="fillr" x="384" y="222" width="284" height="150" rx="3"/>
+          <text class="tl" x="526" y="300" text-anchor="middle">img.hero-img</text>
+          <rect class="acc" x="548" y="232" width="108" height="24" rx="12"/>
+          <text class="onacc" x="602" y="248" text-anchor="middle" style="font-size:11px">Open to work</text>
+          <text class="tl" x="392" y="344">span.badge: position absolute</text>
+          <text class="tl" x="392" y="360">top 1rem; right 1rem; z-index 2</text>
+          <text class="b" x="384" y="396">Valentine Omonya</text>
+          <text class="tm" x="384" y="414" style="font-size:12px">Web Developer</text>
+          <text class="tl" x="540" y="396">p.name</text>
+          <text class="tl" x="540" y="414">p.role</text>
+
+          <!-- box lab -->
+          <line class="ln" x1="41" y1="478" x2="699" y2="478"/>
+          <text class="tl" x="56" y="498">section#lab: position experiments (Part 4)</text>
+          <rect class="fillr" x="56" y="510" width="196" height="40" rx="4"/>
+          <rect class="accl" x="264" y="510" width="196" height="40" rx="4"/>
+          <rect class="fillr" x="472" y="510" width="196" height="40" rx="4"/>
+          <text class="tk" x="154" y="534" text-anchor="middle">.box .box-one</text>
+          <text class="tk" x="362" y="534" text-anchor="middle">.box .box-two</text>
+          <text class="tk" x="570" y="534" text-anchor="middle">.box .box-three</text>
+          <text class="tm" x="154" y="570" text-anchor="middle">static, then fixed</text>
+          <text class="tm" x="362" y="570" text-anchor="middle">relative, then sticky</text>
+          <text class="tm" x="570" y="570" text-anchor="middle">absolute inside #lab</text>
+        </svg>
+      </div>
+      <figcaption>The header is fixed, so it floats over the page and the content needs space reserved under it. Inside <code>#home</code>, the text column and the photo column sit side by side because <code>.hero</code> is a flex row. The badge sits on the corner of the photo because the photo column is <code>relative</code> and the badge is <code>absolute</code>. The box lab at the bottom is for the position experiments in Part 4.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== Part 1 ===== -->
+  <section class="part" id="p1">
+    <div class="part-head">
+      <span class="eyebrow">Part 1 of 4</span>
+      <h2>Variables, reset and classes</h2>
+      <p>Everything else in the project hangs off the classes you create here.</p>
+    </div>
+    <ul class="tasks">
+      <li><label class="task"><input type="checkbox"><span>Keep the reset (<code>* { margin: 0; padding: 0; box-sizing: border-box; }</code>) and the <code>:root</code> variables from class. Add <code>--radius: 0.5rem;</code> and use it later.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Add a <code>.container</code> class with <code>max-width: var(--max-width);</code> and <code>margin: 0 auto;</code>. Put it on a <code>div</code> inside <code>#home</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Add the classes <code>hero</code>, <code>hero-text</code>, <code>hero-photo</code>, <code>hero-img</code>, <code>tag</code>, <code>lead</code>, <code>name</code> and <code>role</code> to the matching tags in the HTML.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Style <code>.tag</code> with the <code>--accent</code> colour and <code>.lead</code> with the <code>--muted</code> colour.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Two classes on one element: give both hero links <code>class="btn"</code>. Add <code>btn-primary</code> to the first (accent background, dark text) and <code>btn-outline</code> to the second (transparent background, 1px border). The shared look lives in <code>.btn</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Add a <code>span</code> with <code>class="badge"</code> in the photo column that says Open to work. Give it a background colour, padding and <code>border-radius: var(--radius)</code>.</span></label></li>
+    </ul>
+    <p class="check"><strong>Checkpoint</strong>The two buttons share one shape and differ only in colour. Changing <code>.btn</code> changes both.</p>
+  </section>
+
+  <!-- ===== Part 2 ===== -->
+  <section class="part" id="p2">
+    <div class="part-head">
+      <span class="eyebrow">Part 2 of 4</span>
+      <h2>Sizing with rem and em</h2>
+      <p>Use your research. The experiments here show you what you read about.</p>
+    </div>
+    <ul class="tasks">
+      <li><label class="task"><input type="checkbox"><span>Set <code>html { font-size: 100%; }</code> and keep body text at <code>1rem</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Set <code>h1</code> to <code>3.5rem</code> and <code>.tag</code> to <code>0.875rem</code>. No px for either.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Use rem for every <code>gap</code>, for section padding and for the margins between text elements.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Write the button padding in em: <code>padding: 0.75em 1.5em;</code>, with <code>font-size: 1rem</code> on <code>.btn</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Experiment 1.</strong> Change <code>.btn</code> to <code>font-size: 1.25rem</code>. The padding grows with it. Change the padding to rem and repeat. Write down what happened each time.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Experiment 2.</strong> Make <code>.parent { font-size: 1.2em; }</code> and <code>.child { font-size: 1.2em; }</code>, put a child inside a parent in the HTML, and measure the child in the browser inspector. Repeat with rem. Delete the experiment when you are done.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Experiment 3.</strong> Change the default font size in your browser settings and refresh. Note which parts of your page scale. Put the setting back.</span></label></li>
+    </ul>
+    <p class="check"><strong>Checkpoint</strong>Nothing in your CSS uses px except borders and the odd thin line.</p>
+  </section>
+
+  <!-- ===== Part 3 ===== -->
+  <section class="part" id="p3">
+    <div class="part-head">
+      <span class="eyebrow">Part 3 of 4</span>
+      <h2>Display</h2>
+      <p>Decide how each part lines up: in a row, in a column, in a line of text, or not at all.</p>
+    </div>
+    <ul class="tasks">
+      <li><label class="task"><input type="checkbox"><span>Keep <code>header nav</code> as a flex row with the logo, the links and the button spread apart.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Make <code>header nav ul</code> a flex row with <code>gap: 2rem</code>. Check that <code>li</code> has no bullets.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Make <code>.hero</code> a flex row with <code>gap: 4rem</code> and <code>align-items: center</code>. The two columns sit side by side.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Make the div holding the two hero buttons a flex row with <code>gap: 1rem</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Make <code>.tag</code> <code>display: inline-block</code> with <code>padding: 0.25em 0.75em</code> and a border, so the padding is visible.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Add the class <code>mobile-menu</code> to the mobile menu div in the header and hide it with <code>display: none</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Change <code>.tag</code> to <code>display: inline</code> and watch what happens to vertical padding. Change it back.</span></label></li>
+    </ul>
+    <p class="check"><strong>Checkpoint</strong>The hero has two columns, the nav is one row, and the mobile menu is gone from view.</p>
+  </section>
+
+  <!-- ===== Part 4 ===== -->
+  <section class="part" id="p4">
+    <div class="part-head">
+      <span class="eyebrow">Part 4 of 4</span>
+      <h2>Position</h2>
+      <p>First the header and badge on your real page. Then a box lab where you try all five values on your own.</p>
+    </div>
+
+    <h3>Header and badge</h3>
+    <ul class="tasks">
+      <li><label class="task"><input type="checkbox"><span>The header is <code>position: fixed</code> at the top. Add <code>padding-top</code> to <code>#home</code>, equal to the header height in rem, so the hero is not hidden behind it.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Give <code>.hero-photo</code> <code>position: relative</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Give <code>.badge</code> <code>position: absolute; top: 1rem; right: 1rem;</code>. It now sits on the corner of the photo.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Remove <code>position: relative</code> from <code>.hero-photo</code> and see where the badge goes. Put it back.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Give the badge <code>z-index: 2</code> and check that it sits over the image.</span></label></li>
+    </ul>
+
+    <h3>Box lab</h3>
+    <p class="prose">Add a section with <code>id="lab"</code> and three divs: <code>class="box box-one"</code>, <code>class="box box-two"</code> and <code>class="box box-three"</code>. Give <code>.box</code> a height of <code>4rem</code>, full width and a different background colour for each box. Add a comment next to each experiment saying what you saw.</p>
+    <ul class="tasks">
+      <li><label class="task"><input type="checkbox"><span><strong>Static.</strong> Leave <code>.box-one</code> alone. Try <code>top: 2rem;</code> on it and note that nothing happens.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Relative.</strong> Set <code>.box-two { position: relative; top: 1rem; left: 2rem; }</code>. The box moves, and the space where it started stays empty.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Absolute.</strong> Set <code>.box-three { position: absolute; right: 0; bottom: 0; }</code>. Find out what it is placed against. Then add <code>position: relative</code> to <code>#lab</code> and see what changes.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Fixed.</strong> Temporarily set <code>.box-one { position: fixed; top: 0; left: 0; }</code>. Scroll. Note what happens to the boxes below it. Remove it.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><strong>Sticky.</strong> Set <code>.box-two { position: sticky; top: 5rem; }</code> and scroll. Note when it sticks and when it stops.</span></label></li>
+    </ul>
+    <p class="check"><strong>Checkpoint</strong>For static, relative, absolute, fixed and sticky, you can say whether the element stays in the flow and what it is positioned against.</p>
+  </section>
+
+  <!-- ===== Questions ===== -->
+  <section class="part" id="questions">
+    <div class="part-head">
+      <span class="eyebrow">In writing</span>
+      <h2>Questions to answer</h2>
+      <p>Answer each in two or three sentences, in your own words. Save them in a file called <code>answers.md</code> in your project folder.</p>
+    </div>
+    <ol class="qs">
+      <li>When do you choose rem over em, and em over rem? Give one example of each from your page.</li>
+      <li>Why can nesting em values make text too large, and how does rem avoid it?</li>
+      <li>What is the difference between <code>display: none</code> and hiding something with <code>opacity: 0</code>?</li>
+      <li>Why did your badge need its parent to have <code>position: relative</code>?</li>
+      <li>Why does a fixed header need space reserved below it?</li>
+      <li>When would you give an element two classes instead of one?</li>
+    </ol>
+  </section>
+
+  <!-- ===== Challenge ===== -->
+  <section class="part" id="challenge">
+    <div class="part-head">
+      <span class="eyebrow">Optional</span>
+      <h2>Challenge and stretch</h2>
+      <p>Try these after the core tasks are done and the checkpoints pass.</p>
+    </div>
+    <ul class="tasks">
+      <li><label class="task"><input type="checkbox"><span><span class="chal">Challenge</span>Change the colour of <code>.btn</code> on hover with <code>.btn:hover</code>, and add <code>transition: background-color 0.2s;</code>.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><span class="chal">Challenge</span>Make the header sticky instead of fixed. List what changes in how the page behaves.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><span class="chal">Challenge</span>Build the hero with <code>display: grid; grid-template-columns: 1fr 1fr;</code> instead of flex, and compare the two.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><span class="chal">Challenge</span>Add a media query, <code>@media (max-width: 768px)</code>, that stacks the hero in a column (<code>flex-direction: column</code>) and hides the nav links.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span><span class="chal">Challenge</span>Show the Menu button only on small screens. Opening the mobile menu needs JavaScript, so do only the visual part.</span></label></li>
+      <li><label class="task"><input type="checkbox"><span>Replace every colour in your CSS with a <code>var(--...)</code> variable.</span></label></li>
+    </ul>
+  </section>
+
+  <!-- ===== Marking ===== -->
+  <section class="part" id="marking">
+    <div class="part-head">
+      <span class="eyebrow">How you are marked</span>
+      <h2>100 marks</h2>
+    </div>
+    <div class="scroll">
+      <table class="ref">
+        <thead><tr><th>Area</th><th>What we look for</th><th>Marks</th></tr></thead>
+        <tbody>
+          <tr><td>Classes and variables</td><td>Reusable classes, two classes on one element, no inline styles, variables used for colours.</td><td>20</td></tr>
+          <tr><td>rem and em</td><td>rem for fonts and spacing, em for button padding, no px except borders, experiments noted.</td><td>20</td></tr>
+          <tr><td>Display</td><td>Flex nav, flex hero, flex button row, inline-block tag, hidden mobile menu.</td><td>20</td></tr>
+          <tr><td>Position</td><td>Fixed header with space under it, relative parent with absolute badge, z-index, all five box lab experiments.</td><td>25</td></tr>
+          <tr><td>Written answers</td><td>Six answers, clear and in your own words.</td><td>10</td></tr>
+          <tr><td>Tidiness</td><td>Indented CSS, helpful comments, no unused rules.</td><td>5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Hand in</h3>
+        <ol class="mini-list" style="margin-top:10px">
+          <li>Zip the whole project folder, including <code>answers.md</code>.</li>
+          <li>Take a screenshot of the finished page with your browser window at full width.</li>
+          <li>Send both to your mentor by the deadline you were given.</li>
+          <li>Unfinished work is fine. Send what you have and say which part you got stuck on.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>If something looks wrong</h3>
+        <ul class="mini-list" style="margin-top:10px">
+          <li>Nothing changes: check that <code>css/styles.css</code> is saved and the path in the <code>link</code> tag matches.</li>
+          <li>A class does nothing: check the dot in CSS (<code>.btn</code>) and the missing dot in HTML (<code>class="btn"</code>).</li>
+          <li>The badge floats off the photo: the parent is missing <code>position: relative</code>.</li>
+          <li>The hero hides under the header: the header is fixed, so add padding to <code>#home</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.task input'));
+    var key = 'css-classes-challenge-ticks';
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { saved = {}; }
+
+    boxes.forEach(function (box, i) {
+      box.id = 'tick-' + i;
+      box.checked = !!saved[i];
+      box.addEventListener('change', function () { update(); persist(); });
+    });
+
+    var fill = document.getElementById('fill');
+    var text = document.getElementById('prog-text');
+
+    function update() {
+      var done = boxes.filter(function (b) { return b.checked; }).length;
+      text.textContent = done + ' of ' + boxes.length + ' ticked';
+      fill.style.width = (boxes.length ? (done / boxes.length) * 100 : 0) + '%';
+    }
+    function persist() {
+      var out = {};
+      boxes.forEach(function (b, i) { if (b.checked) out[i] = 1; });
+      try { localStorage.setItem(key, JSON.stringify(out)); } catch (e) {}
+    }
+    document.getElementById('reset').addEventListener('click', function () {
+      boxes.forEach(function (b) { b.checked = false; });
+      update(); persist();
+    });
+    update();
+  })();
+</script>
+</body>

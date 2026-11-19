@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /*
+    margin:20px; /* 20PX ALL ROUND
+    margin:20px 10px; /*20PX TO AND BOTTOM 10PX LEFT AND RIGHT
+    margin:20px 10px 5px;
+    margin:20px 15px 10px 5px;    margin-left
+    */
+  /* margin-right
+    margin-top
+    margin-bottom */
+  /* MARGIN IS THE SPACE BETWEEN THE CURRENT ELEMENT'S BORDERS AND THE ADJUSCENT ELEMENTS */
+  /* PADDING IS THE THE SPACE BETWEEN THE BORDERS OF AN ELEMENT AND IT'S CONTENT */
+}
+.box {
+  height: 20px;
+  width: 100%;
+  border-radius: 2px;
+  font-size: larger;
+  font-weight: 800;
+}
+.box-one {
+  position: fixed;
+  background-color: #ff5b36;
+  /* left:0px;
+    right:0px;
+    top:0px;
+    bottom:0px */
+}
+.box-two {
+  /* position:relative; */
+  /* z-index:0; */
+  /* left, right */
+  /* top,bottom */
+  background-color: var(--fg);
+}
+/* selector {
+
+    property:value;
+    property2:value2;
+    property3:value3;
+
+
+} */
+/* primary
+secondry
+bg
+fg
+muted
+accent */
+
+:root {
+  --bg: #090909;
+  --fg: #d3c8b8;
+  --muted: #7d766c; /* dimmed text */
+  --accent: #ff5b36; /* orange highlight */
+  --line: rgba(255, 255, 255, 0.07);
+  --max-width: 1280px;
+  --font: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 100;
+  background-color: rgba(9, 9, 9, 0.85);
+}
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--max-width);
+  border-bottom: 1px solid var(--line);
+  margin:0 auto;
+    backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+header nav ul {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+/*
+ PX
+ REM
+ EM
+
+ */
+/*
+FIXED
+STATIC
+RELATIVE
+ASOLUTE
+STICKY
+*/
